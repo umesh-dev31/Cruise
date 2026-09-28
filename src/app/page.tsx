@@ -3,7 +3,6 @@ import Preloader from "@/components/Preloader";
 import FeatureCards from "@/components/FeatureCards";
 import ThirdCanvasWrapper from "@/components/ThirdCanvasWrapper";
 import FifthCanvasWrapper from "@/components/FifthCanvasWrapper";
-import OceanSceneWrapper from "@/components/OceanSceneWrapper";
 import NightlifeBento from "@/components/NightlifeBento";
 import PoolGallery from "@/components/PoolGallery";
 import AboutStats from "@/components/AboutStats";
@@ -41,35 +40,6 @@ const FEATURE_CARDS = [
     price: "Suite Upgrade",
     priceNote: "From $400 / night",
   },
-];
-
-const FEATURES_GRID = [
-  {
-    icon: "◈",
-    title: "Control Your Build",
-    desc: "Set milestones, receive real-time alerts, and communicate directly with your project manager through your client portal.",
-  },
-  {
-    icon: "⚡",
-    title: "Fast & Reliable",
-    desc: "Data updated every shift. No delays, no bottlenecks — just accurate progress straight from the shipyard floor.",
-  },
-  {
-    icon: "◎",
-    title: "Smart Engineering",
-    desc: "Our CAD and simulation systems analyse hull designs and propose optimal solutions before a single cut is made.",
-  },
-  {
-    icon: "⬡",
-    title: "Data Security",
-    desc: "Your designs and specifications are encrypted and stored securely. We never share your data with third parties.",
-  },
-];
-
-const STATS = [
-  { value: "250+", label: "Vessels delivered worldwide" },
-  { value: "42", label: "Countries served" },
-  { value: "35 yrs", label: "Of maritime engineering" },
 ];
 
 export default function Home() {

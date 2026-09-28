@@ -5,18 +5,31 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
+/* ── Static star particle positions ──────────────────────── */
+const STAR_POSITIONS = (() => {
+  const arr = new Float32Array(1800);
+  for (let i = 0; i < 1800; i += 3) {
+    const r1 = Math.abs(Math.sin(i * 12.9898 + 78.233));
+    const r2 = Math.abs(Math.sin((i + 1) * 12.9898 + 78.233));
+    const r3 = Math.abs(Math.sin((i + 2) * 12.9898 + 78.233));
+    arr[i] = (r1 - 0.5) * 30;
+    arr[i + 1] = (r2 - 0.5) * 14 + 4;
+    arr[i + 2] = (r3 - 0.5) * 20 - 4;
+  }
+  return arr;
+})();
+
 /* ── Animated ocean wave mesh ─────────────────────────────── */
 function OceanWave() {
   const meshRef = useRef<THREE.Mesh>(null);
-  const geo = useMemo(() => {
-    const g = new THREE.PlaneGeometry(28, 28, 120, 120);
-    return g;
-  }, []);
+  const geo = useMemo(() => new THREE.PlaneGeometry(28, 28, 120, 120), []);
 
   useFrame(({ clock }) => {
-    if (!meshRef.current) return;
+    const mesh = meshRef.current;
+    if (!mesh) return;
+    const geometry = mesh.geometry as THREE.BufferGeometry;
+    const pos = geometry.attributes.position;
     const t = clock.getElapsedTime();
-    const pos = geo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
       const y = pos.getY(i);
@@ -27,7 +40,7 @@ function OceanWave() {
       pos.setZ(i, wave);
     }
     pos.needsUpdate = true;
-    geo.computeVertexNormals();
+    geometry.computeVertexNormals();
   });
 
   return (
@@ -50,9 +63,11 @@ function WireGrid() {
   const geo = useMemo(() => new THREE.PlaneGeometry(28, 28, 40, 40), []);
 
   useFrame(({ clock }) => {
-    if (!meshRef.current) return;
+    const mesh = meshRef.current;
+    if (!mesh) return;
+    const geometry = mesh.geometry as THREE.BufferGeometry;
+    const pos = geometry.attributes.position;
     const t = clock.getElapsedTime();
-    const pos = geo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
       const y = pos.getY(i);
@@ -75,15 +90,6 @@ function WireGrid() {
 /* ── Floating star particles ──────────────────────────────── */
 function Stars() {
   const ref = useRef<THREE.Points>(null);
-  const positions = useMemo(() => {
-    const arr = new Float32Array(1800);
-    for (let i = 0; i < 1800; i += 3) {
-      arr[i]     = (Math.random() - 0.5) * 30;
-      arr[i + 1] = (Math.random() - 0.5) * 14 + 4;
-      arr[i + 2] = (Math.random() - 0.5) * 20 - 4;
-    }
-    return arr;
-  }, []);
 
   useFrame(({ clock }) => {
     if (ref.current) {
@@ -92,7 +98,7 @@ function Stars() {
   });
 
   return (
-    <Points ref={ref} positions={positions} stride={3}>
+    <Points ref={ref} positions={STAR_POSITIONS} stride={3}>
       <PointMaterial size={0.04} color="#7dd3fc" sizeAttenuation transparent opacity={0.7} />
     </Points>
   );
